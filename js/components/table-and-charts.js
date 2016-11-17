@@ -8,13 +8,15 @@ export default class TableAndCharts extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: props.initialData
     };
     this.handleDataChange = this.handleDataChange.bind(this);
   }
 
   handleDataChange(data) {
+    const { onDataChange } = this.props;
     this.setState({data});
+    onDataChange(data);
   }
 
   renderCharts() {
@@ -30,12 +32,17 @@ export default class TableAndCharts extends PureComponent {
   }
 
   render() {
-    const { columns, labels } = this.props;
+    const { columns, labels, initialData } = this.props;
     return (
       <div className="table-and-charts">
-        <Table columns={columns} labels={labels} onDataChange={this.handleDataChange}/>
+        <Table columns={columns} labels={labels} initialData={initialData} onDataChange={this.handleDataChange}/>
         {this.renderCharts()}
       </div>
     );
   }
 }
+
+TableAndCharts.defaultProps = {
+  initialData: null,
+  onDataChange: function (data) {}
+};

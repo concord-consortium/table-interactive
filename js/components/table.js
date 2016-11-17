@@ -2,13 +2,14 @@ import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
 export default class Table extends PureComponent {
-  componentDidMount() {
-    this.userData = [];
+  constructor(props) {
+    super(props);
+    this.userData = this.props.initialData;
   }
 
   componentWillUpdate(newProps) {
     const { columns, labels, onDataChange } = this.props;
-    if (newProps.columns.length !== columns.length || newProps.labels.length !== labels.length) {
+    if (this.userData && (newProps.columns.length !== columns.length || newProps.labels.length !== labels.length)) {
       // Make sure that data corresponds to number of rows and columns.
       this.userData.length = newProps.labels.length;
       this.userData.forEach(row => {
@@ -69,7 +70,7 @@ export default class Table extends PureComponent {
 }
 
 Table.defaultProps = {
-  data: [],
+  initialData: null,
   labels: ['a', 'b', 'c', 'd'],
   columns: [{heading: 'col1'}, {heading: 'col2'}],
   headingsWidths: undefined,

@@ -1,44 +1,28 @@
 import React, {PureComponent} from 'react';
-import TableAndCharts from './table-and-charts';
+import Runtime from './runtime';
 
 import '../../css/authoring.less';
 
 export default class Authoring extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      columns: [
-        {
-          heading: 'Labels',
-          readOnly: true,
-          chart: false
-        },
-        {
-          heading: 'Description',
-          readOnly: false,
-          chart: false
-        },
-        {
-          heading: 'Value 1',
-          readOnly: false,
-          chart: true
-        },
-        {
-          heading: 'Value 2',
-          readOnly: false,
-          chart: true,
-          chartColor: '#009688'
-        }
-      ],
-      labels: ['a', 'b', 'c'],
-      chartWidth: 300,
-      chartHeight: 240
-    };
+    this.state = props.initialAuthoredState;
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleListElemChange = this.handleListElemChange.bind(this);
     this.handleListElemRemove = this.handleListElemRemove.bind(this);
     this.handleListElemAdd = this.handleListElemAdd.bind(this);
     this.handleColumnAdd = this.handleColumnAdd.bind(this);
+  }
+
+  get authoredState() {
+    // It's just the current state. In the future we might process it somehow, e.g. remove some state properties
+    // that are related only to the authoring UI, not the final interactive.
+    return this.state;
+  }
+
+  componentDidUpdate() {
+    const { onAuthoredStateChange } = this.props;
+    onAuthoredStateChange(this.authoredState);
   }
 
   handleInputChange(event) {
@@ -75,10 +59,10 @@ export default class Authoring extends PureComponent {
     this.setState({[listName]: list.concat(newValue)});
   }
 
-  handleColumnAdd(event) {
+  handleColumnAdd() {
     const { columns } = this.state;
     const newCol = {
-      heading: "new column",
+      heading: "New column",
       readOnly: false,
       chart: false
     };
@@ -142,7 +126,8 @@ export default class Authoring extends PureComponent {
   }
 
   render() {
-    const { columns, labels, chartWidth, chartHeight } = this.state;
+    const { chartWidth, chartHeight } = this.state;
+    const { initialInteractiveState } = this.props;
     return (
       <div className="authoring">
         <h3>Authoring</h3>
@@ -161,9 +146,13 @@ export default class Authoring extends PureComponent {
         </div>
         <h3>Preview</h3>
         <div className="preview">
-          <TableAndCharts columns={columns} labels={labels} chartWidth={chartWidth} chartHeight={chartHeight}/>
+          <Runtime authoredState={this.authoredState} initialInteractiveState={initialInteractiveState}/>
         </div>
       </div>
     );
   }
 }
+
+Authoring.defaultProps = {
+  onAuthoredStateChange: function (state) {}
+};
