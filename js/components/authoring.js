@@ -11,17 +11,23 @@ export default class Authoring extends PureComponent {
         {
           heading: 'Labels',
           readOnly: true,
-          graph: false
+          chart: false
         },
         {
           heading: 'Description',
           readOnly: false,
-          graph: false
+          chart: false
         },
         {
-          heading: 'Graphable value',
+          heading: 'Value 1',
           readOnly: false,
-          graph: true
+          chart: true
+        },
+        {
+          heading: 'Value 2',
+          readOnly: false,
+          chart: true,
+          chartColor: '#009688'
         }
       ],
       labels: ['a', 'b', 'c'],
@@ -46,20 +52,20 @@ export default class Authoring extends PureComponent {
     const propName = event.target.dataset.propName;
     const index = event.target.dataset.index;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-    const list = this.state[listName];
+    const list = this.state[listName].concat(); // .concat() to duplicate array.
     if (propName) {
       list[index][propName] = value;
     } else {
       list[index] = value;
     }
-    this.setState({[listName]: list.concat()}); // .concat() to duplicate array.
+    this.setState({[listName]: list});
   }
 
   handleListElemRemove(event) {
     const listName = event.target.dataset.listName;
-    const list = this.state[listName];
+    const list = this.state[listName].concat(); // .concat() to duplicate array.
     list.splice(Number(event.target.dataset.index), 1);
-    this.setState({[listName]: list.concat()}); // .concat() to duplicate array.
+    this.setState({[listName]: list});
   }
 
   handleListElemAdd(event) {
@@ -74,7 +80,7 @@ export default class Authoring extends PureComponent {
     const newCol = {
       heading: "new column",
       readOnly: false,
-      graph: false
+      chart: false
     };
     this.setState({columns: columns.concat(newCol)});
   }
@@ -110,7 +116,8 @@ export default class Authoring extends PureComponent {
         <tr key={index}>
           <td><input type="text" value={col.heading} data-index={index} data-list-name="columns" data-prop-name="heading" onChange={this.handleListElemChange}/></td>
           <td><input type="checkbox" checked={col.readOnly} data-index={index} data-list-name="columns" data-prop-name="readOnly" onChange={this.handleListElemChange}/></td>
-          <td><input type="checkbox" checked={col.graph} data-index={index} data-list-name="columns" data-prop-name="graph" onChange={this.handleListElemChange}/></td>
+          <td><input type="checkbox" checked={col.chart} data-index={index} data-list-name="columns" data-prop-name="chart" onChange={this.handleListElemChange}/></td>
+          <td><input type="text" style={{width: "50px"}} value={col.chartColor} data-index={index} data-list-name="columns" data-prop-name="chartColor" onChange={this.handleListElemChange}/></td>
           <td><i className="rm-icon fa fa-times-circle" data-index={index} data-list-name="columns" onClick={this.handleListElemRemove}/></td>
         </tr>
       )
@@ -122,7 +129,7 @@ export default class Authoring extends PureComponent {
       <div className="edit-section">
         <table className="center">
           <tbody>
-            <tr><th>Column heading</th><th>Read only</th><th>Graph</th><th></th></tr>
+            <tr><th>Column heading</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
             {this.renderColumns()}
           </tbody>
         </table>

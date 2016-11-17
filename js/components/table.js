@@ -6,6 +6,18 @@ export default class Table extends PureComponent {
     this.userData = [];
   }
 
+  componentWillUpdate(newProps) {
+    const { columns, labels, onDataChange } = this.props;
+    if (newProps.columns.length !== columns.length || newProps.labels.length !== labels.length) {
+      // Make sure that data corresponds to number of rows and columns.
+      this.userData.length = newProps.labels.length;
+      this.userData.forEach(row => {
+        row.length = newProps.columns.length;
+      });
+      onDataChange(this.data);
+    }
+  }
+
   get handsontableOptions() {
     const { columns, headingWidths, onDataChange } = this.props;
     const opts = {
@@ -17,20 +29,30 @@ export default class Table extends PureComponent {
       rowHeaders: false,
       allowInsertRow: false,
       minSpareRows: 0,
-      afterChange: function (change, type) {
-        onDataChange(this.getData());
+      afterChange: (change, type) => {
+        if (type === 'edit') {
+          this.userData = this.refs.hot.getData();
+          onDataChange(this.userData);
+        }
       }
     };
     return opts;
   }
 
+  getUserData(row, col) {
+    if (!this.userData) return null;
+    if (this.userData[row] === undefined) return null;
+    if (this.userData[row][col] === undefined) return null;
+    return this.userData[row][col];
+  }
+
   get data() {
-    const { labels, headings } = this.props;
+    const { labels, columns } = this.props;
     const data = [];
-    labels.forEach(function (label) {
+    labels.forEach((label, rowIdx) => {
       const row = [label];
-      for (let i = 0; i < headings.length - 1; i++) {
-        row.push(null);
+      for (let i = 1; i < columns.length; i++) {
+        row.push(this.getUserData(rowIdx, i));
       }
       data.push(row);
     });
@@ -40,7 +62,7 @@ export default class Table extends PureComponent {
   render() {
     return (
       <div className="table">
-        <ReactHandsontable {...this.handsontableOptions}/>
+        <ReactHandsontable ref="hot" {...this.handsontableOptions}/>
       </div>
     );
   }
@@ -49,7 +71,7 @@ export default class Table extends PureComponent {
 Table.defaultProps = {
   data: [],
   labels: ['a', 'b', 'c', 'd'],
-  headings: ['column 1', 'column 2', 'column 3'],
+  columns: [{heading: 'col1'}, {heading: 'col2'}],
   headingsWidths: undefined,
   onDataChange: function (data) {}
 };

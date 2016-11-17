@@ -11,6 +11,10 @@ export default class ReactHandsontable extends PureComponent {
     this.hot.updateSettings(nextProps);
   }
 
+  getData() {
+    return this.hot.getData();
+  }
+
   render() {
     return (
       <div ref="container"></div>

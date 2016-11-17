@@ -1,10 +1,20 @@
 import React, {PureComponent} from 'react';
 import {Bar} from 'react-chartjs-2';
 
-const aspectRatioOpt = {}//{maintainAspectRatio: false};
+const OPTIONS = {
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: [{
+      ticks: {
+        beginAtZero:true
+      }
+    }]
+  },
+  animation: false
+};
 
 export default class Chart extends PureComponent {
-  get graphData() {
+  get chartData() {
     const { name, labels, data, color } = this.props;
     return {
       labels,
@@ -25,7 +35,7 @@ export default class Chart extends PureComponent {
     const barGraphKey = `${width}${height}`;
     return (
       <div className="chart" style={{width: `${width}px`, height: `${height}px`}}>
-        <Bar key={barGraphKey} width={width} height={height} data={this.graphData} options={aspectRatioOpt}/>
+        <Bar key={barGraphKey} width={width} height={height} data={this.chartData} options={OPTIONS}/>
       </div>
     );
   }
@@ -35,7 +45,7 @@ Chart.defaultProps = {
   width: 300,
   height: 240,
   name: 'Test data',
-  color: 'rgb(255,99,132)',
+  color: '#ff6384',
   labels: [1, 2, 3],
   data: [0, 1, 2]
 };
