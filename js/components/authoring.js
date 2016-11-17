@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import Table from './table';
+import TableAndCharts from './table-and-charts';
 
 import '../../css/authoring.less';
 
@@ -24,12 +24,21 @@ export default class Authoring extends PureComponent {
           graph: true
         }
       ],
-      labels: ['a', 'b', 'c']
+      labels: ['a', 'b', 'c'],
+      chartWidth: 300,
+      chartHeight: 240
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleListElemChange = this.handleListElemChange.bind(this);
     this.handleListElemRemove = this.handleListElemRemove.bind(this);
     this.handleListElemAdd = this.handleListElemAdd.bind(this);
     this.handleColumnAdd = this.handleColumnAdd.bind(this);
+  }
+
+  handleInputChange(event) {
+    const name = event.target.name;
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    this.setState({[name]: value});
   }
 
   handleListElemChange(event) {
@@ -84,11 +93,11 @@ export default class Authoring extends PureComponent {
 
   renderListEditor(title, listName) {
     return (
-      <div className="list-editor">
+      <div className="edit-section">
         {title}
         {this.renderListElements(listName)}
         <div>
-          <i className="add-icon fa fa-plus-circle" data-list-name={listName} data-new-value="new value" onClick={this.handleListElemAdd}/>
+          <i className="add-icon fa fa-plus-circle" data-list-name={listName} data-new-value="x" onClick={this.handleListElemAdd}/>
         </div>
       </div>
     );
@@ -110,8 +119,8 @@ export default class Authoring extends PureComponent {
 
   renderColumnsEditor() {
     return (
-      <div className="list-editor">
-        <table>
+      <div className="edit-section">
+        <table className="center">
           <tbody>
             <tr><th>Column heading</th><th>Read only</th><th>Graph</th><th></th></tr>
             {this.renderColumns()}
@@ -126,15 +135,26 @@ export default class Authoring extends PureComponent {
   }
 
   render() {
-    const { columns, labels } = this.state;
+    const { columns, labels, chartWidth, chartHeight } = this.state;
     return (
       <div className="authoring">
-        <h2>Table authoring</h2>
-        {this.renderColumnsEditor()}
-        {this.renderListEditor('Labels', 'labels')}
+        <h3>Authoring</h3>
+        <div className="authoring-section">
+          {this.renderColumnsEditor()}
+          {this.renderListEditor('Labels', 'labels')}
+          <div className="edit-section">
+            <p>Graph dimensions</p>
+            <table>
+            <tbody>
+              <tr><td>Width</td><td><input type="range" min="150" max="800" name="chartWidth" value={chartWidth} onChange={this.handleInputChange}/></td><td>{chartWidth} px</td></tr>
+              <tr><td>Height</td><td><input type="range" min="150" max="600" name="chartHeight" value={chartHeight} onChange={this.handleInputChange}/></td><td>{chartHeight} px</td></tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+        <h3>Preview</h3>
         <div className="preview">
-          Preview:
-          <Table columns={columns} labels={labels}/>
+          <TableAndCharts columns={columns} labels={labels} chartWidth={chartWidth} chartHeight={chartHeight}/>
         </div>
       </div>
     );

@@ -2,8 +2,12 @@ import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
 export default class Table extends PureComponent {
+  componentDidMount() {
+    this.userData = [];
+  }
+
   get handsontableOptions() {
-    const { columns, headingWidths } = this.props;
+    const { columns, headingWidths, onDataChange } = this.props;
     const opts = {
       data: this.data,
       columns: columns,
@@ -11,9 +15,10 @@ export default class Table extends PureComponent {
       colHeaders: columns.map(c => c.heading),
       contextMenu: false,
       rowHeaders: false,
-      allowInsertRow: true,
+      allowInsertRow: false,
       minSpareRows: 0,
       afterChange: function (change, type) {
+        onDataChange(this.getData());
       }
     };
     return opts;
@@ -34,7 +39,9 @@ export default class Table extends PureComponent {
 
   render() {
     return (
-      <ReactHandsontable {...this.handsontableOptions}/>
+      <div className="table">
+        <ReactHandsontable {...this.handsontableOptions}/>
+      </div>
     );
   }
 }
@@ -43,5 +50,6 @@ Table.defaultProps = {
   data: [],
   labels: ['a', 'b', 'c', 'd'],
   headings: ['column 1', 'column 2', 'column 3'],
-  headingsWidths: undefined
+  headingsWidths: undefined,
+  onDataChange: function (data) {}
 };

@@ -12,13 +12,15 @@
     cursor: pointer;
   }
 
-  .list-editor {
+  .edit-section {
     display: inline-block;
     margin-right: 40px;
     vertical-align: top;
 
-    td {
-      text-align: center;
+    .center {
+      td {
+        text-align: center;
+      }
     }
 
     th {
@@ -27,7 +29,14 @@
     }
   }
 
+  .authoring-section {
+    margin-bottom: 15px;
+  }
+
   .preview {
-    margin-top: 20px;
+    // Full-width size of the interactive in LARA.
+    width: 936px;
+    border: 1px solid gray;
+    border-radius: 5px;
   }
 }
