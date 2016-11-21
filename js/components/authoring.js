@@ -113,7 +113,7 @@ export default class Authoring extends PureComponent {
       <div className="edit-section">
         <table className="center">
           <tbody>
-            <tr><th>Column heading</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
+            <tr><th>Column</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
             {this.renderColumns()}
           </tbody>
         </table>
@@ -130,7 +130,6 @@ export default class Authoring extends PureComponent {
     const { initialInteractiveState } = this.props;
     return (
       <div className="authoring">
-        <h3>Authoring</h3>
         <div className="authoring-section">
           {this.renderColumnsEditor()}
           {this.renderListEditor('Labels', 'labels')}
@@ -144,7 +143,7 @@ export default class Authoring extends PureComponent {
             </table>
           </div>
         </div>
-        <h3>Preview</h3>
+        <h3>Preview (scaled down to 80%)</h3>
         <div className="preview">
           <Runtime authoredState={this.authoredState} initialInteractiveState={initialInteractiveState}/>
         </div>
