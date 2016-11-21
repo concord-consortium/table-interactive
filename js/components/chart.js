@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Bar} from 'react-chartjs-2';
 
+const DEF_COLOR = '#ff6384';
 const OPTIONS = {
   maintainAspectRatio: false,
   scales: {
@@ -20,7 +21,7 @@ export default class Chart extends PureComponent {
       labels,
       datasets: [{
         label: name,
-        backgroundColor: color,
+        backgroundColor: color || DEF_COLOR,
         data
       }]
     };
@@ -45,7 +46,7 @@ Chart.defaultProps = {
   width: 300,
   height: 240,
   name: 'Test data',
-  color: '#ff6384',
+  color: DEF_COLOR,
   labels: [1, 2, 3],
   data: [0, 1, 2]
 };

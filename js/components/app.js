@@ -3,6 +3,7 @@ import Authoring from './authoring';
 import Runtime from './runtime';
 import getURLParam from '../get-url-param';
 import iframePhone from 'iframe-phone';
+import Shutterbug from 'shutterbug';
 
 import '../../css/app.less';
 import 'font-awesome/css/font-awesome.css'
@@ -12,17 +13,20 @@ const DEFAULT_AUTHORED_STATE = {
     {
       heading: 'Labels',
       readOnly: true,
-      chart: false
+      chart: false,
+      chartColor: ''
     },
     {
       heading: 'Description',
       readOnly: false,
-      chart: false
+      chart: false,
+      chartColor: ''
     },
     {
       heading: 'Value 1',
       readOnly: false,
-      chart: true
+      chart: true,
+      chartColor: ''
     },
     {
       heading: 'Value 2',
@@ -55,6 +59,7 @@ export default class App extends PureComponent {
   }
 
   componentDidMount() {
+    Shutterbug.enable();
     this.phone = iframePhone.getIFrameEndpoint();
     this.phone.addListener('initInteractive', this.initInteractive);
     this.phone.addListener('getLearnerUrl', this.sendLearnerUrl);
@@ -63,6 +68,7 @@ export default class App extends PureComponent {
   }
 
   componentWillUnmount() {
+    Shutterbug.disable();
     this.phone.disconnect();
   }
 
