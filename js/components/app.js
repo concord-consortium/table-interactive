@@ -78,6 +78,13 @@ export default class App extends PureComponent {
       authoredState: data.authoredState || DEFAULT_AUTHORED_STATE,
       interactiveState: data.interactiveState || DEFAULT_INTERACTIVE_STATE
     });
+    this.phone.post('supportedFeatures', {
+      apiVersion: 1,
+      features: {
+        authoredState: true,
+        interactiveState: true
+      }
+    });
   }
 
   sendLearnerUrl() {

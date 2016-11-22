@@ -3,6 +3,8 @@ import Runtime from './runtime';
 
 import '../../css/authoring.less';
 
+const LARA_FULL_WIDTH = 936; // px, typical interactive size
+
 export default class Authoring extends PureComponent {
   constructor(props) {
     super(props);
@@ -128,6 +130,7 @@ export default class Authoring extends PureComponent {
   render() {
     const { chartWidth, chartHeight } = this.state;
     const { initialInteractiveState } = this.props;
+    const previewScale = Math.min(1, window.innerWidth / LARA_FULL_WIDTH * 0.97);
     return (
       <div className="authoring">
         <div className="authoring-section">
@@ -143,8 +146,8 @@ export default class Authoring extends PureComponent {
             </table>
           </div>
         </div>
-        <h3>Preview (scaled down to 80%)</h3>
-        <div className="preview">
+        <h3>Preview (scaled down to {(previewScale * 100).toFixed(0)}%)</h3>
+        <div className="preview" style={{transform: `scale(${previewScale})`}}>
           <Runtime authoredState={this.authoredState} initialInteractiveState={initialInteractiveState}/>
         </div>
       </div>
