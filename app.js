@@ -29644,9 +29644,8 @@
 	    key: 'handleListElemAdd',
 	    value: function handleListElemAdd(event) {
 	      var listName = event.target.dataset.listName;
-	      var newValue = event.target.dataset.newValue;
 	      var list = this.state[listName];
-	      this.setState(_defineProperty({}, listName, list.concat(newValue)));
+	      this.setState(_defineProperty({}, listName, list.concat("")));
 	    }
 	  }, {
 	    key: 'handleColumnAdd',
@@ -29654,9 +29653,10 @@
 	      var columns = this.state.columns;
 
 	      var newCol = {
-	        heading: "New column",
+	        heading: "",
 	        readOnly: false,
-	        chart: false
+	        chart: false,
+	        chartColor: ''
 	      };
 	      this.setState({ columns: columns.concat(newCol) });
 	    }
@@ -29686,7 +29686,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement('i', { className: 'add-icon fa fa-plus-circle', 'data-list-name': listName, 'data-new-value': 'x', onClick: this.handleListElemAdd })
+	          _react2.default.createElement('i', { className: 'add-icon fa fa-plus-circle', 'data-list-name': listName, onClick: this.handleListElemAdd })
 	        )
 	      );
 	    }
@@ -29747,7 +29747,7 @@
 	              _react2.default.createElement(
 	                'th',
 	                null,
-	                'Column'
+	                'Columns'
 	              ),
 	              _react2.default.createElement(
 	                'th',
@@ -29791,7 +29791,7 @@
 	          'div',
 	          { className: 'authoring-section' },
 	          this.renderColumnsEditor(),
-	          this.renderListEditor('Labels', 'labels'),
+	          this.renderListEditor('Rows', 'labels'),
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'edit-section' },
