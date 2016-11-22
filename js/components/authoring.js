@@ -56,17 +56,17 @@ export default class Authoring extends PureComponent {
 
   handleListElemAdd(event) {
     const listName = event.target.dataset.listName;
-    const newValue = event.target.dataset.newValue;
     const list = this.state[listName];
-    this.setState({[listName]: list.concat(newValue)});
+    this.setState({[listName]: list.concat("")});
   }
 
   handleColumnAdd() {
     const { columns } = this.state;
     const newCol = {
-      heading: "New column",
+      heading: "",
       readOnly: false,
-      chart: false
+      chart: false,
+      chartColor: ''
     };
     this.setState({columns: columns.concat(newCol)});
   }
@@ -89,7 +89,7 @@ export default class Authoring extends PureComponent {
         {title}
         {this.renderListElements(listName)}
         <div>
-          <i className="add-icon fa fa-plus-circle" data-list-name={listName} data-new-value="x" onClick={this.handleListElemAdd}/>
+          <i className="add-icon fa fa-plus-circle" data-list-name={listName} onClick={this.handleListElemAdd}/>
         </div>
       </div>
     );
@@ -115,7 +115,7 @@ export default class Authoring extends PureComponent {
       <div className="edit-section">
         <table className="center">
           <tbody>
-            <tr><th>Column</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
+            <tr><th>Columns</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
             {this.renderColumns()}
           </tbody>
         </table>
@@ -135,7 +135,7 @@ export default class Authoring extends PureComponent {
       <div className="authoring">
         <div className="authoring-section">
           {this.renderColumnsEditor()}
-          {this.renderListEditor('Labels', 'labels')}
+          {this.renderListEditor('Rows', 'labels')}
           <div className="edit-section">
             <p>Graph dimensions</p>
             <table>
