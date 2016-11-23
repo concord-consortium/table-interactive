@@ -29426,7 +29426,7 @@
 
 	var DEFAULT_AUTHORED_STATE = {
 	  columns: [{
-	    heading: 'Labels',
+	    heading: 'Trial',
 	    readOnly: true,
 	    chart: false,
 	    chartColor: ''
@@ -29436,18 +29436,18 @@
 	    chart: false,
 	    chartColor: ''
 	  }, {
-	    heading: 'Value 1',
+	    heading: 'Value 1 (unit)',
 	    readOnly: false,
 	    chart: true,
 	    chartColor: ''
 	  }, {
-	    heading: 'Value 2',
+	    heading: 'Value 2 (unit)',
 	    readOnly: false,
 	    chart: true,
-	    chartColor: '#009688'
+	    chartColor: 'green'
 	  }],
 	  labels: ['a', 'b', 'c'],
-	  chartWidth: 300,
+	  chartWidth: 295,
 	  chartHeight: 240
 	};
 
@@ -30030,7 +30030,7 @@
 	        var colData = data !== null ? data.map(function (row) {
 	          return row[colIdx];
 	        }) : [];
-	        return _react2.default.createElement(_chart2.default, { key: colIdx, data: colData, color: column.chartColor, labels: labels, name: column.heading, width: chartWidth, height: chartHeight });
+	        return _react2.default.createElement(_chart2.default, { key: colIdx, data: colData, color: column.chartColor, labels: labels, xLabel: columns[0].heading, name: column.heading, width: chartWidth, height: chartHeight });
 	      });
 	    }
 	  }, {
@@ -64661,17 +64661,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var DEF_COLOR = '#ff6384';
-	var OPTIONS = {
-	  maintainAspectRatio: false,
-	  scales: {
-	    yAxes: [{
-	      ticks: {
-	        beginAtZero: true
-	      }
-	    }]
-	  },
-	  animation: false
-	};
 
 	var Chart = function (_PureComponent) {
 	  _inherits(Chart, _PureComponent);
@@ -64697,7 +64686,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'chart', style: { width: width + 'px', height: height + 'px' } },
-	        _react2.default.createElement(_reactChartjs.Bar, { key: barGraphKey, width: width, height: height, data: this.chartData, options: OPTIONS })
+	        _react2.default.createElement(_reactChartjs.Bar, { key: barGraphKey, width: width, height: height, data: this.chartData, options: this.options })
 	      );
 	    }
 	  }, {
@@ -64718,6 +64707,35 @@
 	        }]
 	      };
 	    }
+	  }, {
+	    key: 'options',
+	    get: function get() {
+	      var _props3 = this.props,
+	          xLabel = _props3.xLabel,
+	          name = _props3.name;
+
+	      return {
+	        maintainAspectRatio: false,
+	        scales: {
+	          yAxes: [{
+	            scaleLabel: {
+	              display: true,
+	              labelString: name
+	            },
+	            ticks: {
+	              beginAtZero: true
+	            }
+	          }],
+	          xAxes: [{
+	            scaleLabel: {
+	              display: true,
+	              labelString: xLabel
+	            }
+	          }]
+	        },
+	        animation: false
+	      };
+	    }
 	  }]);
 
 	  return Chart;
@@ -64730,6 +64748,7 @@
 	  width: 300,
 	  height: 240,
 	  name: 'Test data',
+	  xLabel: 'X label',
 	  color: DEF_COLOR,
 	  labels: [1, 2, 3],
 	  data: [0, 1, 2]
@@ -91785,7 +91804,7 @@
 
 
 	// module
-	exports.push([module.id, ".table-and-charts {\n  padding: 5px;\n}\n.table-and-charts .chart {\n  display: inline-block;\n}\n.table-and-charts .table {\n  margin: 10px 0 10px 10px;\n  font-size: 14px;\n}\n", ""]);
+	exports.push([module.id, ".table-and-charts {\n  padding: 5px;\n}\n.table-and-charts .chart {\n  display: inline-block;\n  margin-left: 5px;\n  margin-right: 5px;\n}\n.table-and-charts .table {\n  margin: 10px 0 10px 10px;\n  font-size: 14px;\n}\n", ""]);
 
 	// exports
 
