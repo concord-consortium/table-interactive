@@ -2,17 +2,6 @@ import React, {PureComponent} from 'react';
 import {Bar} from 'react-chartjs-2';
 
 const DEF_COLOR = '#ff6384';
-const OPTIONS = {
-  maintainAspectRatio: false,
-  scales: {
-    yAxes: [{
-      ticks: {
-        beginAtZero:true
-      }
-    }]
-  },
-  animation: false
-};
 
 export default class Chart extends PureComponent {
   get chartData() {
@@ -27,6 +16,31 @@ export default class Chart extends PureComponent {
     };
   }
 
+  get options() {
+    const { xLabel, name } = this.props;
+    return {
+      maintainAspectRatio: false,
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: name
+          },
+          ticks: {
+            beginAtZero: true
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: xLabel
+          }
+        }]
+      },
+      animation: false
+    };
+  }
+
   render() {
     let { width, height } = this.props;
     width = parseInt(width);
@@ -36,7 +50,7 @@ export default class Chart extends PureComponent {
     const barGraphKey = `${width}${height}`;
     return (
       <div className="chart" style={{width: `${width}px`, height: `${height}px`}}>
-        <Bar key={barGraphKey} width={width} height={height} data={this.chartData} options={OPTIONS}/>
+        <Bar key={barGraphKey} width={width} height={height} data={this.chartData} options={this.options}/>
       </div>
     );
   }
@@ -46,6 +60,7 @@ Chart.defaultProps = {
   width: 300,
   height: 240,
   name: 'Test data',
+  xLabel: 'X label',
   color: DEF_COLOR,
   labels: [1, 2, 3],
   data: [0, 1, 2]

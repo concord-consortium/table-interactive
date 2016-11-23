@@ -26,7 +26,7 @@ export default class TableAndCharts extends PureComponent {
       if (!column.chart) return null;
       const colData = data !== null ? data.map(row => row[colIdx]) : [];
       return (
-        <Chart key={colIdx} data={colData} color={column.chartColor} labels={labels} name={column.heading} width={chartWidth} height={chartHeight}/>
+        <Chart key={colIdx} data={colData} color={column.chartColor} labels={labels} xLabel={columns[0].heading} name={column.heading} width={chartWidth} height={chartHeight}/>
       )
     });
   }

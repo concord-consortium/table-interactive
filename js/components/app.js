@@ -11,7 +11,7 @@ import 'font-awesome/css/font-awesome.css'
 const DEFAULT_AUTHORED_STATE = {
   columns: [
     {
-      heading: 'Labels',
+      heading: 'Trial',
       readOnly: true,
       chart: false,
       chartColor: ''
@@ -23,20 +23,20 @@ const DEFAULT_AUTHORED_STATE = {
       chartColor: ''
     },
     {
-      heading: 'Value 1',
+      heading: 'Value 1 (unit)',
       readOnly: false,
       chart: true,
       chartColor: ''
     },
     {
-      heading: 'Value 2',
+      heading: 'Value 2 (unit)',
       readOnly: false,
       chart: true,
-      chartColor: '#009688'
+      chartColor: 'green'
     }
   ],
   labels: ['a', 'b', 'c'],
-  chartWidth: 300,
+  chartWidth: 295,
   chartHeight: 240
 };
 
