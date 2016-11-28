@@ -64661,6 +64661,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var DEF_COLOR = '#ff6384';
+	var UPDATE_DELAY = 350; // ms
 
 	var Chart = function (_PureComponent) {
 	  _inherits(Chart, _PureComponent);
@@ -64672,47 +64673,10 @@
 	  }
 
 	  _createClass(Chart, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props,
-	          width = _props.width,
-	          height = _props.height;
-
-	      width = parseInt(width);
-	      height = parseInt(height);
-	      // Little hack - react-chart-2 doesn't work well when you dynamically change width or height properties.
-	      // So, if we provide `key` based on width and height, it will force React to completely recreate this element.
-	      var barGraphKey = '' + width + height;
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'chart', style: { width: width + 'px', height: height + 'px' } },
-	        _react2.default.createElement(_reactChartjs.Bar, { key: barGraphKey, width: width, height: height, data: this.chartData, options: this.options })
-	      );
-	    }
-	  }, {
-	    key: 'chartData',
-	    get: function get() {
-	      var _props2 = this.props,
-	          name = _props2.name,
-	          labels = _props2.labels,
-	          data = _props2.data,
-	          color = _props2.color;
-
-	      return {
-	        labels: labels,
-	        datasets: [{
-	          label: name,
-	          backgroundColor: color || DEF_COLOR,
-	          data: data
-	        }]
-	      };
-	    }
-	  }, {
-	    key: 'options',
-	    get: function get() {
-	      var _props3 = this.props,
-	          xLabel = _props3.xLabel,
-	          name = _props3.name;
+	    key: 'getOptions',
+	    value: function getOptions(props) {
+	      var xLabel = props.xLabel,
+	          name = props.name;
 
 	      return {
 	        maintainAspectRatio: false,
@@ -64734,6 +64698,68 @@
 	          }]
 	        },
 	        animation: false
+	      };
+	    }
+	  }, {
+	    key: 'getKey',
+	    value: function getKey(props) {
+	      var width = props.width,
+	          height = props.height;
+
+	      return '' + width + height + JSON.stringify(this.getOptions(props));
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps) {
+	      var _this2 = this;
+
+	      // Rendering of this component might be slow when we need to recreate graph element
+	      // (and that happens when key is changed).
+	      if (this.getKey(this.props) !== this.getKey(nextProps)) {
+	        clearTimeout(this._timeoutId);
+	        this._timeoutId = setTimeout(function () {
+	          _this2.forceUpdate();
+	        }, UPDATE_DELAY);
+	        return false;
+	      }
+	      return true;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          width = _props.width,
+	          height = _props.height;
+
+	      width = parseInt(width);
+	      height = parseInt(height);
+	      var options = this.getOptions(this.props);
+	      // Little hack - react-chart-2 doesn't work well when you dynamically change width, height or options properties.
+	      // So, if we provide `key` based on width and height, it will force React to completely recreate this element.
+	      // See: https://github.com/gor181/react-chartjs-2/issues/40
+	      var barGraphKey = this.getKey(this.props);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'chart', style: { width: width + 'px', height: height + 'px' } },
+	        _react2.default.createElement(_reactChartjs.Bar, { key: barGraphKey, width: width, height: height, data: this.chartData, options: options })
+	      );
+	    }
+	  }, {
+	    key: 'chartData',
+	    get: function get() {
+	      var _props2 = this.props,
+	          name = _props2.name,
+	          labels = _props2.labels,
+	          data = _props2.data,
+	          color = _props2.color;
+
+	      return {
+	        labels: labels,
+	        datasets: [{
+	          label: name,
+	          backgroundColor: color || DEF_COLOR,
+	          data: data
+	        }]
 	      };
 	    }
 	  }]);
