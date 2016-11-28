@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {Bar} from 'react-chartjs-2';
 
 const DEF_COLOR = '#ff6384';
+const UPDATE_DELAY = 350; // ms
 
 export default class Chart extends PureComponent {
   get chartData() {
@@ -16,8 +17,8 @@ export default class Chart extends PureComponent {
     };
   }
 
-  get options() {
-    const { xLabel, name } = this.props;
+  getOptions(props) {
+    const { xLabel, name } = props;
     return {
       maintainAspectRatio: false,
       scales: {
@@ -41,16 +42,36 @@ export default class Chart extends PureComponent {
     };
   }
 
+  getKey(props) {
+    let { width, height } = props;
+    return `${width}${height}${JSON.stringify(this.getOptions(props))}`;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // Rendering of this component might be slow when we need to recreate graph element
+    // (and that happens when key is changed).
+    if (this.getKey(this.props) !== this.getKey(nextProps)) {
+      clearTimeout(this._timeoutId);
+      this._timeoutId = setTimeout(() => {
+        this.forceUpdate();
+      }, UPDATE_DELAY);
+      return false;
+    }
+    return true;
+  }
+
   render() {
     let { width, height } = this.props;
     width = parseInt(width);
     height = parseInt(height);
-    // Little hack - react-chart-2 doesn't work well when you dynamically change width or height properties.
+    const options = this.getOptions(this.props);
+    // Little hack - react-chart-2 doesn't work well when you dynamically change width, height or options properties.
     // So, if we provide `key` based on width and height, it will force React to completely recreate this element.
-    const barGraphKey = `${width}${height}`;
+    // See: https://github.com/gor181/react-chartjs-2/issues/40
+    const barGraphKey = this.getKey(this.props);
     return (
       <div className="chart" style={{width: `${width}px`, height: `${height}px`}}>
-        <Bar key={barGraphKey} width={width} height={height} data={this.chartData} options={this.options}/>
+        <Bar key={barGraphKey} width={width} height={height} data={this.chartData} options={options}/>
       </div>
     );
   }
