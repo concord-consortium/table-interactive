@@ -53,7 +53,6 @@ export default class App extends PureComponent {
       interactiveState: DEFAULT_INTERACTIVE_STATE
     };
     this.initInteractive = this.initInteractive.bind(this);
-    this.sendLearnerUrl = this.sendLearnerUrl.bind(this);
     this.handleAuthoredStateChange = this.handleAuthoredStateChange.bind(this);
     this.handleInteractiveStateChange = this.handleInteractiveStateChange.bind(this);
   }
@@ -62,7 +61,6 @@ export default class App extends PureComponent {
     Shutterbug.enable();
     this.phone = iframePhone.getIFrameEndpoint();
     this.phone.addListener('initInteractive', this.initInteractive);
-    this.phone.addListener('getLearnerUrl', this.sendLearnerUrl);
     // Initialize connection after all message listeners are added!
     this.phone.initialize();
   }
@@ -85,11 +83,6 @@ export default class App extends PureComponent {
         interactiveState: true
       }
     });
-  }
-
-  sendLearnerUrl() {
-    // Required by LARA. In the future we might want to send versioned URL or just remove it.
-    this.phone.post('setLearnerUrl', window.location.href);
   }
 
   handleAuthoredStateChange(state) {
