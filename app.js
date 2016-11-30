@@ -29469,7 +29469,6 @@
 	      interactiveState: DEFAULT_INTERACTIVE_STATE
 	    };
 	    _this.initInteractive = _this.initInteractive.bind(_this);
-	    _this.sendLearnerUrl = _this.sendLearnerUrl.bind(_this);
 	    _this.handleAuthoredStateChange = _this.handleAuthoredStateChange.bind(_this);
 	    _this.handleInteractiveStateChange = _this.handleInteractiveStateChange.bind(_this);
 	    return _this;
