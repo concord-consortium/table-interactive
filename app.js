@@ -29481,7 +29481,6 @@
 	      _shutterbug2.default.enable();
 	      this.phone = _iframePhone2.default.getIFrameEndpoint();
 	      this.phone.addListener('initInteractive', this.initInteractive);
-	      this.phone.addListener('getLearnerUrl', this.sendLearnerUrl);
 	      // Initialize connection after all message listeners are added!
 	      this.phone.initialize();
 	    }
@@ -29506,12 +29505,6 @@
 	          interactiveState: true
 	        }
 	      });
-	    }
-	  }, {
-	    key: 'sendLearnerUrl',
-	    value: function sendLearnerUrl() {
-	      // Required by LARA. In the future we might want to send versioned URL or just remove it.
-	      this.phone.post('setLearnerUrl', window.location.href);
 	    }
 	  }, {
 	    key: 'handleAuthoredStateChange',
