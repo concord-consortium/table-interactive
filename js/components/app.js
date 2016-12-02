@@ -53,6 +53,7 @@ export default class App extends PureComponent {
       interactiveState: DEFAULT_INTERACTIVE_STATE
     };
     this.initInteractive = this.initInteractive.bind(this);
+    this.getInteractiveState = this.getInteractiveState.bind(this);
     this.handleAuthoredStateChange = this.handleAuthoredStateChange.bind(this);
     this.handleInteractiveStateChange = this.handleInteractiveStateChange.bind(this);
   }
@@ -61,6 +62,7 @@ export default class App extends PureComponent {
     Shutterbug.enable();
     this.phone = iframePhone.getIFrameEndpoint();
     this.phone.addListener('initInteractive', this.initInteractive);
+    this.phone.addListener('getInteractiveState', this.getInteractiveState);
     // Initialize connection after all message listeners are added!
     this.phone.initialize();
   }
@@ -85,11 +87,21 @@ export default class App extends PureComponent {
     });
   }
 
+  getInteractiveState(data) {
+    // "nochange" is a special value supported by LARA which means the state hasn't changed
+    var interactiveState = "nochange";
+    if(this._currentInteractiveState) {
+      interactiveState = this._currentInteractiveState;
+    }
+    this.phone.post('interactiveState', interactiveState);
+  }
+
   handleAuthoredStateChange(state) {
     this.phone.post('authoredState', state);
   }
 
   handleInteractiveStateChange(state) {
+    this._currentInteractiveState = state;
     this.phone.post('interactiveState', state);
   }
 
