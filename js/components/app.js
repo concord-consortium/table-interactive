@@ -88,7 +88,12 @@ export default class App extends PureComponent {
   }
 
   getInteractiveState(data) {
-    this.phone.post('interactiveState', this.state.interactiveState);
+    // "nochange" is a special value supported by LARA which means the state hasn't changed
+    var interactiveState = "nochange";
+    if(this._currentInteractiveState) {
+      interactiveState = this._currentInteractiveState;
+    }
+    this.phone.post('interactiveState', interactiveState);
   }
 
   handleAuthoredStateChange(state) {
@@ -96,7 +101,7 @@ export default class App extends PureComponent {
   }
 
   handleInteractiveStateChange(state) {
-    this.state.interactiveState = state;
+    this._currentInteractiveState = state;
     this.phone.post('interactiveState', state);
   }
 
