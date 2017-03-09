@@ -73,10 +73,12 @@ export default class App extends PureComponent {
   }
 
   initInteractive(data) {
+    const authoredState = typeof data.authoredState === 'string' ? JSON.parse(data.authoredState) : data.authoredState;
+    const interactiveState = typeof data.interactiveState === 'string' ? JSON.parse(data.interactiveState) : data.interactiveState;
     this.setState({
       mode: data.mode,
-      authoredState: data.authoredState || DEFAULT_AUTHORED_STATE,
-      interactiveState: data.interactiveState || DEFAULT_INTERACTIVE_STATE
+      authoredState: authoredState || DEFAULT_AUTHORED_STATE,
+      interactiveState: interactiveState || DEFAULT_INTERACTIVE_STATE
     });
     this.phone.post('supportedFeatures', {
       apiVersion: 1,
@@ -114,7 +116,7 @@ export default class App extends PureComponent {
           <Authoring initialAuthoredState={authoredState} initialInteractiveState={DEFAULT_INTERACTIVE_STATE}
                      onAuthoredStateChange={this.handleAuthoredStateChange}/>
         }
-        {mode === 'runtime' &&
+        {(mode === 'runtime' || mode === 'report') &&
           <Runtime authoredState={authoredState} initialInteractiveState={interactiveState}
                    onInteractiveStateChange={this.handleInteractiveStateChange}/>}
       </div>
