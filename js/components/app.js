@@ -109,6 +109,7 @@ export default class App extends PureComponent {
 
   render() {
     const { mode, authoredState, interactiveState } = this.state;
+    const readOnly = mode === 'report';
     return (
       <div>
         {mode === null && <p>Waiting for iframe-phone initInteractive call...</p>}
@@ -117,7 +118,7 @@ export default class App extends PureComponent {
                      onAuthoredStateChange={this.handleAuthoredStateChange}/>
         }
         {(mode === 'runtime' || mode === 'report') &&
-          <Runtime authoredState={authoredState} initialInteractiveState={interactiveState}
+          <Runtime authoredState={authoredState} initialInteractiveState={interactiveState} readOnly={readOnly}
                    onInteractiveStateChange={this.handleInteractiveStateChange}/>}
       </div>
     );
