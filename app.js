@@ -29494,10 +29494,12 @@
 	  }, {
 	    key: 'initInteractive',
 	    value: function initInteractive(data) {
+	      var authoredState = typeof data.authoredState === 'string' ? JSON.parse(data.authoredState) : data.authoredState;
+	      var interactiveState = typeof data.interactiveState === 'string' ? JSON.parse(data.interactiveState) : data.interactiveState;
 	      this.setState({
 	        mode: data.mode,
-	        authoredState: data.authoredState || DEFAULT_AUTHORED_STATE,
-	        interactiveState: data.interactiveState || DEFAULT_INTERACTIVE_STATE
+	        authoredState: authoredState || DEFAULT_AUTHORED_STATE,
+	        interactiveState: interactiveState || DEFAULT_INTERACTIVE_STATE
 	      });
 	      this.phone.post('supportedFeatures', {
 	        apiVersion: 1,
@@ -29536,6 +29538,7 @@
 	          authoredState = _state.authoredState,
 	          interactiveState = _state.interactiveState;
 
+	      var readOnly = mode === 'report';
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -29546,7 +29549,7 @@
 	        ),
 	        mode === 'authoring' && _react2.default.createElement(_authoring2.default, { initialAuthoredState: authoredState, initialInteractiveState: DEFAULT_INTERACTIVE_STATE,
 	          onAuthoredStateChange: this.handleAuthoredStateChange }),
-	        mode === 'runtime' && _react2.default.createElement(_runtime2.default, { authoredState: authoredState, initialInteractiveState: interactiveState,
+	        (mode === 'runtime' || mode === 'report') && _react2.default.createElement(_runtime2.default, { authoredState: authoredState, initialInteractiveState: interactiveState, readOnly: readOnly,
 	          onInteractiveStateChange: this.handleInteractiveStateChange })
 	      );
 	    }
@@ -29940,14 +29943,19 @@
 	    value: function render() {
 	      var _props = this.props,
 	          authoredState = _props.authoredState,
-	          initialInteractiveState = _props.initialInteractiveState;
+	          initialInteractiveState = _props.initialInteractiveState,
+	          readOnly = _props.readOnly;
 	      var columns = authoredState.columns,
 	          labels = authoredState.labels,
 	          chartWidth = authoredState.chartWidth,
 	          chartHeight = authoredState.chartHeight;
 	      var data = initialInteractiveState.data;
+	      // If `readOnly` property is set to true, overwrite `readOnly` property of the column definitions.
 
-	      return _react2.default.createElement(_tableAndCharts2.default, { columns: columns, labels: labels, chartWidth: chartWidth, chartHeight: chartHeight,
+	      var columnsDef = readOnly ? columns.map(function (c) {
+	        return Object.assign({}, c, { readOnly: true });
+	      }) : columns;
+	      return _react2.default.createElement(_tableAndCharts2.default, { columns: columnsDef, labels: labels, chartWidth: chartWidth, chartHeight: chartHeight,
 	        initialData: data,
 	        onDataChange: this.handleDataChange });
 	    }
