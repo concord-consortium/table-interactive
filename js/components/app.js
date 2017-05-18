@@ -73,10 +73,12 @@ export default class App extends PureComponent {
   }
 
   initInteractive(data) {
+    const authoredState = typeof data.authoredState === 'string' ? JSON.parse(data.authoredState) : data.authoredState;
+    const interactiveState = typeof data.interactiveState === 'string' ? JSON.parse(data.interactiveState) : data.interactiveState;
     this.setState({
       mode: data.mode,
-      authoredState: data.authoredState || DEFAULT_AUTHORED_STATE,
-      interactiveState: data.interactiveState || DEFAULT_INTERACTIVE_STATE
+      authoredState: authoredState || DEFAULT_AUTHORED_STATE,
+      interactiveState: interactiveState || DEFAULT_INTERACTIVE_STATE
     });
     this.phone.post('supportedFeatures', {
       apiVersion: 1,
@@ -107,6 +109,7 @@ export default class App extends PureComponent {
 
   render() {
     const { mode, authoredState, interactiveState } = this.state;
+    const readOnly = mode === 'report';
     return (
       <div>
         {mode === null && <p>Waiting for iframe-phone initInteractive call...</p>}
@@ -114,8 +117,8 @@ export default class App extends PureComponent {
           <Authoring initialAuthoredState={authoredState} initialInteractiveState={DEFAULT_INTERACTIVE_STATE}
                      onAuthoredStateChange={this.handleAuthoredStateChange}/>
         }
-        {mode === 'runtime' &&
-          <Runtime authoredState={authoredState} initialInteractiveState={interactiveState}
+        {(mode === 'runtime' || mode === 'report') &&
+          <Runtime authoredState={authoredState} initialInteractiveState={interactiveState} readOnly={readOnly}
                    onInteractiveStateChange={this.handleInteractiveStateChange}/>}
       </div>
     );
