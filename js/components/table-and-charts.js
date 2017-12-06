@@ -32,10 +32,10 @@ export default class TableAndCharts extends PureComponent {
   }
 
   render() {
-    const { columns, labels, initialData } = this.props;
+    const { columns, labels, rowLines, initialData } = this.props;
     return (
       <div className="table-and-charts">
-        <Table columns={columns} labels={labels} initialData={initialData} onDataChange={this.handleDataChange}/>
+        <Table columns={columns} labels={labels} rowLines={rowLines} initialData={initialData} onDataChange={this.handleDataChange}/>
         {this.renderCharts()}
       </div>
     );
