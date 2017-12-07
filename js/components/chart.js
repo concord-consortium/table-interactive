@@ -3,12 +3,29 @@ import {Bar} from 'react-chartjs-2';
 
 const DEF_COLOR = '#ff6384';
 const UPDATE_DELAY = 350; // ms
+const LABEL_LINE_MAX = 9;
 
 export default class Chart extends PureComponent {
   get chartData() {
     const { name, labels, data, color } = this.props;
+    
+    // Split label into 2 lines if it's too long
+    let splitLabels = labels.map(label => {
+      if(label.length > LABEL_LINE_MAX) {
+        let firstLine = label.substring(0, LABEL_LINE_MAX);
+        let breakIndex = label.indexOf(" ");
+        if(breakIndex == -1 || breakIndex > LABEL_LINE_MAX) {
+          return [firstLine, label.substring(LABEL_LINE_MAX)];
+        } 
+        else {
+          return [label.substring(0, breakIndex), label.substring(breakIndex)];
+        }
+      }
+      return label;
+    });
+
     return {
-      labels,
+      labels: splitLabels,
       datasets: [{
         label: name,
         backgroundColor: color || DEF_COLOR,
