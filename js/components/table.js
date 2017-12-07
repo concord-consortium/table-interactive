@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
+const ROW_LINE_HEIGHT = 22;
+
 export default class Table extends PureComponent {
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ export default class Table extends PureComponent {
   }
 
   get handsontableOptions() {
-    const { columns, headingWidths, onDataChange } = this.props;
+    const { columns, headingWidths, rowLines, onDataChange } = this.props;
     const opts = {
       data: this.data,
       columns: columns,
@@ -28,6 +30,7 @@ export default class Table extends PureComponent {
       colHeaders: columns.map(c => c.heading),
       contextMenu: false,
       rowHeaders: false,
+      rowHeights: rowLines * ROW_LINE_HEIGHT,
       allowInsertRow: false,
       minSpareRows: 0,
       afterChange: (change, type) => {
@@ -73,6 +76,7 @@ Table.defaultProps = {
   initialData: null,
   labels: ['a', 'b', 'c', 'd'],
   columns: [{heading: 'col1'}, {heading: 'col2'}],
+  rowLines: 1,
   headingsWidths: undefined,
   onDataChange: function (data) {}
 };

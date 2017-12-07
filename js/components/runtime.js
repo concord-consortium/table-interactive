@@ -14,12 +14,13 @@ export default class Runtime extends PureComponent {
 
   render() {
     const { authoredState, initialInteractiveState, readOnly } = this.props;
-    const { columns, labels, chartWidth, chartHeight } = authoredState;
+    const { columns, labels, chartWidth, chartHeight, rowLines } = authoredState;
     const { data } = initialInteractiveState;
     // If `readOnly` property is set to true, overwrite `readOnly` property of the column definitions.
     const columnsDef = readOnly ? columns.map(c => Object.assign({}, c, {readOnly: true})) : columns;
     return (
-      <TableAndCharts columns={columnsDef} labels={labels} chartWidth={chartWidth} chartHeight={chartHeight}
+      <TableAndCharts columns={columnsDef} labels={labels} rowLines={rowLines} 
+                      chartWidth={chartWidth} chartHeight={chartHeight}
                       initialData={data}
                       onDataChange={this.handleDataChange}/>
     )

@@ -37,7 +37,8 @@ const DEFAULT_AUTHORED_STATE = {
   ],
   labels: ['a', 'b', 'c'],
   chartWidth: 295,
-  chartHeight: 240
+  chartHeight: 240,
+  rowLines: 1
 };
 
 const DEFAULT_INTERACTIVE_STATE = {
