@@ -53,13 +53,29 @@ export default class Table extends PureComponent {
   get data() {
     const { labels, columns } = this.props;
     const data = [];
+    let showAvg = false;
+    let avgRow = ["Average"];
+    let sums = Array(labels.length).fill(0);
     labels.forEach((label, rowIdx) => {
       const row = [label];
       for (let i = 1; i < columns.length; i++) {
-        row.push(this.getUserData(rowIdx, i));
+        var userData = this.getUserData(rowIdx, i);
+        row.push(userData);
+        
+        if(columns[i].average == true) {
+          showAvg = true;
+        }
+        sums[i] += userData ? parseFloat(userData) : 0;
       }
       data.push(row);
     });
+    
+    if(showAvg) {
+      for (let i = 1; i < columns.length; i++) {
+        avgRow[i] = columns[i].average ? sums[i] / labels.length : "";
+      }
+      data.push(avgRow);
+    }
     return data;
   }
 

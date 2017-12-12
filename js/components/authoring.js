@@ -65,6 +65,7 @@ export default class Authoring extends PureComponent {
     const newCol = {
       heading: "",
       readOnly: false,
+      average: false,
       chart: false,
       chartColor: ''
     };
@@ -102,6 +103,7 @@ export default class Authoring extends PureComponent {
         <tr key={index}>
           <td><input type="text" value={col.heading} data-index={index} data-list-name="columns" data-prop-name="heading" onChange={this.handleListElemChange}/></td>
           <td><input type="checkbox" checked={col.readOnly} data-index={index} data-list-name="columns" data-prop-name="readOnly" onChange={this.handleListElemChange}/></td>
+          <td><input type="checkbox" checked={col.average} data-index={index} data-list-name="columns" data-prop-name="average" onChange={this.handleListElemChange}/></td>
           <td><input type="checkbox" checked={col.chart} data-index={index} data-list-name="columns" data-prop-name="chart" onChange={this.handleListElemChange}/></td>
           <td><input type="text" style={{width: "50px"}} value={col.chartColor} data-index={index} data-list-name="columns" data-prop-name="chartColor" onChange={this.handleListElemChange}/></td>
           <td><i className="rm-icon fa fa-times-circle" data-index={index} data-list-name="columns" onClick={this.handleListElemRemove}/></td>
@@ -117,7 +119,7 @@ export default class Authoring extends PureComponent {
         <div className="table-columns">
           <table className="center">
             <tbody>
-              <tr><th>Headings</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
+              <tr><th>Headings</th><th>Read only</th><th>Avg</th><th>Chart</th><th>Color</th></tr>
               {this.renderColumns()}
             </tbody>
           </table>

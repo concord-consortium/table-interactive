@@ -13,24 +13,28 @@ const DEFAULT_AUTHORED_STATE = {
     {
       heading: 'Trial',
       readOnly: true,
+      avg: false,
       chart: false,
       chartColor: ''
     },
     {
       heading: 'Description',
       readOnly: false,
+      avg: false,
       chart: false,
       chartColor: ''
     },
     {
       heading: 'Value 1 (unit)',
       readOnly: false,
+      avg: false,
       chart: true,
       chartColor: ''
     },
     {
       heading: 'Value 2 (unit)',
       readOnly: false,
+      avg: false,
       chart: true,
       chartColor: 'green'
     }
