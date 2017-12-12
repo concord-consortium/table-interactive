@@ -85,7 +85,7 @@ export default class Authoring extends PureComponent {
 
   renderListEditor(title, listName) {
     return (
-      <div className="edit-section">
+      <div className="edit-section list-editor">
         {title}
         {this.renderListElements(listName)}
         <div>
@@ -138,7 +138,7 @@ export default class Authoring extends PureComponent {
       <div className="authoring">
         <div className="authoring-section">
           {this.renderColumnsEditor()}
-          {this.renderListEditor('Rows', 'labels')}
+          {this.renderListEditor('Columns', 'labels')}
           <div className="edit-section">
             <p>Graph dimensions</p>
             <table>
