@@ -100,7 +100,7 @@ export default class Table extends PureComponent {
           sum += parseFloat(value);
         }
       }
-      avgRow[i] = sum / columns.length;
+      avgRow[i] = sum / data.length;
     }
   
     return avgRow;
