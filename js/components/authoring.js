@@ -22,6 +22,11 @@ export default class Authoring extends PureComponent {
     return this.state;
   }
 
+  get avgsEnabled() {
+    const { columns } = this.state;
+    return columns.filter((column) => {return column.average}).length > 0;
+  }
+
   componentDidUpdate() {
     const { onAuthoredStateChange } = this.props;
     onAuthoredStateChange(this.authoredState);
@@ -133,7 +138,7 @@ export default class Authoring extends PureComponent {
   }
 
   render() {
-    const { chartWidth, chartHeight, rowLines } = this.state;
+    const { chartWidth, chartHeight, rowLines, chartAvgs } = this.state;
     const { initialInteractiveState } = this.props;
     const previewScale = Math.min(1, window.innerWidth / LARA_FULL_WIDTH * 0.97);
     return (
@@ -150,6 +155,7 @@ export default class Authoring extends PureComponent {
               <tr><td>Row Height</td><td><input type="range" min="1" max="5" name="rowLines" value={rowLines} onChange={this.handleInputChange}/></td><td>{rowLines} line{rowLines > 1 ? "s" : ""}</td></tr>
             </tbody>
             </table>
+            <div><input type="checkbox" name="chartAvgs" checked={chartAvgs} disabled={!this.avgsEnabled} onChange={this.handleInputChange}/>Chart Averages</div>
           </div>
         </div>
         <h3>Preview (scaled down to {(previewScale * 100).toFixed(0)}%)</h3>

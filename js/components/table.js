@@ -93,15 +93,14 @@ export default class Table extends PureComponent {
     let avgRow = ["Average"];
     for(let i=1; i < columns.length; i++) {
       let c = columns[i];     
-      let sum = 0, valueCount = 0;
+      let sum = 0;
       for(let k=0; k < data.length; k++) {
         let value = data[k][i];
         if(value != undefined && value != "") {
           sum += parseFloat(value);
-          valueCount++;
         }
       }
-      avgRow[i] = valueCount > 0 ? sum / valueCount : 0;
+      avgRow[i] = sum / columns.length;
     }
   
     return avgRow;
