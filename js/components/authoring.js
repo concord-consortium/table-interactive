@@ -119,7 +119,7 @@ export default class Authoring extends PureComponent {
         <div className="table-columns">
           <table className="center">
             <tbody>
-              <tr><th>Headings</th><th>Read only</th><th>Avg</th><th>Chart</th><th>Color</th></tr>
+              <tr><th>Headings</th><th>Read only</th><th>Avg</th><th>Bar Graph</th><th>Color</th></tr>
               {this.renderColumns()}
             </tbody>
           </table>
