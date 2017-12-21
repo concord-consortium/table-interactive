@@ -7,6 +7,9 @@ export default class Table extends PureComponent {
   constructor(props) {
     super(props);
     this.userData = this.props.initialData;
+    this.state = {
+      avgRow: ["Average"]
+    };
   }
 
   componentWillUpdate(newProps) {
@@ -23,8 +26,27 @@ export default class Table extends PureComponent {
 
   get handsontableOptions() {
     const { columns, headingWidths, rowLines, onDataChange } = this.props;
+    const { avgRow } = this.state;
+    let tableData = this.data;
+    let showAvgs = columns.find((column)=>{return column.average === true}) !== undefined;
+    if(showAvgs && tableData[tableData.length-1][0] !== "Average") {
+      let avgDisplay = avgRow.concat();
+      for(let i=1; i < columns.length; i++) {
+        if(!columns[i].average) {
+          avgDisplay[i] = "";
+        }
+      }
+      tableData.push(avgDisplay);
+    }
     const opts = {
-      data: this.data,
+      data: tableData,
+      cells: (row, col) => {
+        // Make the average row read-only
+        let cellProps = {};
+        let column = columns[col];
+        cellProps.readOnly = column.readOnly || showAvgs && row === this.data.length;
+        return cellProps;
+      },
       columns: columns,
       colWidths: headingWidths,
       colHeaders: columns.map(c => c.heading),
@@ -37,6 +59,7 @@ export default class Table extends PureComponent {
         if (type === 'edit') {
           this.userData = this.refs.hot.getData();
           onDataChange(this.userData);
+          this.setState({avgRow: this.calcAverages(this.data)});
         }
       }
     };
@@ -53,30 +76,35 @@ export default class Table extends PureComponent {
   get data() {
     const { labels, columns } = this.props;
     const data = [];
-    let showAvg = false;
-    let avgRow = ["Average"];
-    let sums = Array(labels.length).fill(0);
     labels.forEach((label, rowIdx) => {
       const row = [label];
       for (let i = 1; i < columns.length; i++) {
-        var userData = this.getUserData(rowIdx, i);
+      let userData = this.getUserData(rowIdx, i);
         row.push(userData);
-        
-        if(columns[i].average == true) {
-          showAvg = true;
-        }
-        sums[i] += userData ? parseFloat(userData) : 0;
       }
       data.push(row);
     });
-    
-    if(showAvg) {
-      for (let i = 1; i < columns.length; i++) {
-        avgRow[i] = columns[i].average ? sums[i] / labels.length : "";
-      }
-      data.push(avgRow);
-    }
+
     return data;
+  }
+  
+  calcAverages(data) {
+    const { columns } = this.props;
+    let avgRow = ["Average"];
+    for(let i=1; i < columns.length; i++) {
+      let c = columns[i];     
+      let sum = 0, valueCount = 0;
+      for(let k=0; k < data.length; k++) {
+        let value = data[k][i];
+        if(value != undefined && value != "") {
+          sum += parseFloat(value);
+          valueCount++;
+        }
+      }
+      avgRow[i] = valueCount > 0 ? sum / valueCount : 0;
+    }
+  
+    return avgRow;
   }
 
   render() {
