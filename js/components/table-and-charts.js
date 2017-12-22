@@ -32,13 +32,14 @@ export default class TableAndCharts extends PureComponent {
       if(column === null) {
         return "";
       }
-      let sum = 0;
+      let sum = 0, valCount = 0;
       column.forEach((value, rowIdx) => {
         if(value != undefined && value != "") {
           sum += parseFloat(value);
+          valCount++;
         }
       });
-      return sum / column.length;
+      return sum / valCount;
     });
     return avgs;
   }
