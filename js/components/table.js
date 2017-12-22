@@ -2,14 +2,12 @@ import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
 const ROW_LINE_HEIGHT = 22;
+const AVG_LABEL = "Average";
 
 export default class Table extends PureComponent {
   constructor(props) {
     super(props);
     this.userData = this.props.initialData;
-    this.state = {
-      avgRow: ["Average"]
-    };
   }
 
   componentWillUpdate(newProps) {
@@ -20,23 +18,29 @@ export default class Table extends PureComponent {
       this.userData.forEach(row => {
         row.length = newProps.columns.length;
       });
-      onDataChange(this.data);
+      onDataChange(this.removeAvgRow(this.userData));
     }
   }
 
   get handsontableOptions() {
-    const { columns, headingWidths, rowLines, onDataChange } = this.props;
-    const { avgRow } = this.state;
+    const { columns, headingWidths, rowLines, averages, onDataChange } = this.props;
     let tableData = this.data;
     let showAvgs = columns.find((column)=>{return column.average === true}) !== undefined;
-    if(showAvgs && tableData[tableData.length-1][0] !== "Average") {
-      let avgDisplay = avgRow.concat();
-      for(let i=1; i < columns.length; i++) {
-        if(!columns[i].average) {
-          avgDisplay[i] = "";
+    if(showAvgs) {
+      let avgRow = averages.concat();
+      // hide averages for columns not set to display it
+      columns.forEach((column, colIdx) => {
+        if(!column.average) {
+          avgRow[colIdx] = "";
         }
+      });
+      avgRow[0] = AVG_LABEL;
+      if(tableData[tableData.length-1][0] !== AVG_LABEL) {
+        tableData.push(avgRow);
       }
-      tableData.push(avgDisplay);
+      else {
+        tableData[tableData.length-1] = avgRow;
+      }
     }
     const opts = {
       data: tableData,
@@ -58,8 +62,7 @@ export default class Table extends PureComponent {
       afterChange: (change, type) => {
         if (type === 'edit') {
           this.userData = this.refs.hot.getData();
-          onDataChange(this.userData);
-          this.setState({avgRow: this.calcAverages(this.data)});
+          onDataChange(this.removeAvgRow(this.userData));
         }
       }
     };
@@ -71,6 +74,14 @@ export default class Table extends PureComponent {
     if (this.userData[row] === undefined) return null;
     if (this.userData[row][col] === undefined) return null;
     return this.userData[row][col];
+  }
+
+  removeAvgRow(data) {
+    let lastIdx = data.length - 1;
+    if(data[lastIdx] && data[lastIdx][0] === AVG_LABEL) {
+      data.splice(lastIdx, 1);
+    }
+    return data;
   }
 
   get data() {
@@ -86,24 +97,6 @@ export default class Table extends PureComponent {
     });
 
     return data;
-  }
-  
-  calcAverages(data) {
-    const { columns } = this.props;
-    let avgRow = ["Average"];
-    for(let i=1; i < columns.length; i++) {
-      let c = columns[i];     
-      let sum = 0;
-      for(let k=0; k < data.length; k++) {
-        let value = data[k][i];
-        if(value != undefined && value != "") {
-          sum += parseFloat(value);
-        }
-      }
-      avgRow[i] = sum / data.length;
-    }
-  
-    return avgRow;
   }
 
   render() {
