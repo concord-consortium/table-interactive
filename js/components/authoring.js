@@ -113,15 +113,18 @@ export default class Authoring extends PureComponent {
   renderColumnsEditor() {
     return (
       <div className="edit-section">
-        <table className="center">
-          <tbody>
-            <tr><th>Columns</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
-            {this.renderColumns()}
-          </tbody>
-        </table>
+        <div>Columns</div>
+        <div className="table-columns">
+          <table className="center">
+            <tbody>
+              <tr><th>Headings</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
+              {this.renderColumns()}
+            </tbody>
+          </table>
 
-        <div>
-          <i className="add-icon fa fa-plus-circle" onClick={this.handleColumnAdd}/>
+          <div>
+            <i className="add-icon fa fa-plus-circle" onClick={this.handleColumnAdd}/>
+          </div>
         </div>
       </div>
     );
