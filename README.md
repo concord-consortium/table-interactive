@@ -1,6 +1,7 @@
 # Table Interactive
 
-https://concord-consortium.github.io/table-interactive/
+Production: https://models-resources.concord.org/table-interactive/index.html
+Dev version: https://models-resources.concord.org/table-interactive/branch/master/index.html
 
 ## Development
 
