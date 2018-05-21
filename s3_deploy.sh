@@ -9,7 +9,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
 	exit 0
 fi
 
-if [ "$TRAVIS_BRANCH" = 'master' ]; then
+if [ "$TRAVIS_BRANCH" = "master" ]; then
   mv $SRC_DIR _site
   INVAL_PATH="/index.html"
 else
