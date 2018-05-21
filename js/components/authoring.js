@@ -91,7 +91,7 @@ export default class Authoring extends PureComponent {
 
   renderListEditor(title, listName) {
     return (
-      <div className="edit-section list-editor">
+      <div className="list-editor">
         {title}
         {this.renderListElements(listName)}
         <div>
@@ -145,14 +145,17 @@ export default class Authoring extends PureComponent {
       <div className="authoring">
         <div className="authoring-section">
           {this.renderColumnsEditor()}
-          {this.renderListEditor('Rows', 'labels')}
+          <div className="edit-section">
+            {this.renderListEditor('Rows', 'labels')}
+            <br/>
+            <div>Row Height <input type="range" min="1" max="5" name="rowLines" value={rowLines} onChange={this.handleInputChange}/> {rowLines} line{rowLines > 1 ? "s" : ""}</div>
+          </div>
           <div className="edit-section">
             <p>Graph dimensions</p>
             <table>
             <tbody>
               <tr><td>Width</td><td><input type="range" min="150" max="800" name="chartWidth" value={chartWidth} onChange={this.handleInputChange}/></td><td>{chartWidth} px</td></tr>
               <tr><td>Height</td><td><input type="range" min="150" max="600" name="chartHeight" value={chartHeight} onChange={this.handleInputChange}/></td><td>{chartHeight} px</td></tr>
-              <tr><td>Row Height</td><td><input type="range" min="1" max="5" name="rowLines" value={rowLines} onChange={this.handleInputChange}/></td><td>{rowLines} line{rowLines > 1 ? "s" : ""}</td></tr>
             </tbody>
             </table>
             <div><input type="checkbox" name="chartAvgs" checked={chartAvgs} disabled={!this.avgsEnabled} onChange={this.handleInputChange}/> Chart Averages</div>
