@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
 const ROW_LINE_HEIGHT = 22;
+const AVG_LABEL = 'Average';
 
 export default class Table extends PureComponent {
   constructor(props) {
@@ -17,14 +18,27 @@ export default class Table extends PureComponent {
       this.userData.forEach(row => {
         row.length = newProps.columns.length;
       });
-      onDataChange(this.data);
+      onDataChange(this.removeAvgRow(this.userData));
     }
   }
 
   get handsontableOptions() {
-    const { columns, headingWidths, rowLines, onDataChange } = this.props;
-    const opts = {
-      data: this.data,
+    const { columns, headingWidths, rowLines, averages, onDataChange } = this.props;
+    const tableData = this.data;
+    const showAvgs = columns.find(column => column.average) !== undefined
+    if (showAvgs) {
+      const avgRow = averages.concat();
+      avgRow[0] = AVG_LABEL;
+      tableData.push(avgRow);
+    }
+    return {
+      data: tableData,
+      cells: (row, col) => {
+        // Make the average row read-only
+        return {
+          readOnly: columns[col].readOnly || showAvgs && row === tableData.length - 1
+        }
+      },
       columns: columns,
       colWidths: headingWidths,
       colHeaders: columns.map(c => c.heading),
@@ -36,11 +50,10 @@ export default class Table extends PureComponent {
       afterChange: (change, type) => {
         if (type === 'edit') {
           this.userData = this.refs.hot.getData();
-          onDataChange(this.userData);
+          onDataChange(this.removeAvgRow(this.userData));
         }
       }
     };
-    return opts;
   }
 
   getUserData(row, col) {
@@ -48,6 +61,14 @@ export default class Table extends PureComponent {
     if (this.userData[row] === undefined) return null;
     if (this.userData[row][col] === undefined) return null;
     return this.userData[row][col];
+  }
+
+  removeAvgRow(data) {
+    let lastIdx = data.length - 1;
+    if (data[lastIdx] && data[lastIdx][0] === AVG_LABEL) {
+      data.splice(lastIdx, 1);
+    }
+    return data;
   }
 
   get data() {
@@ -60,6 +81,7 @@ export default class Table extends PureComponent {
       }
       data.push(row);
     });
+
     return data;
   }
 

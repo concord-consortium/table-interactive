@@ -22,6 +22,11 @@ export default class Authoring extends PureComponent {
     return this.state;
   }
 
+  get avgsEnabled() {
+    const { columns } = this.state;
+    return columns.filter(column => column.average).length > 0;
+  }
+
   componentDidUpdate() {
     const { onAuthoredStateChange } = this.props;
     onAuthoredStateChange(this.authoredState);
@@ -65,6 +70,7 @@ export default class Authoring extends PureComponent {
     const newCol = {
       heading: "",
       readOnly: false,
+      average: false,
       chart: false,
       chartColor: ''
     };
@@ -85,7 +91,7 @@ export default class Authoring extends PureComponent {
 
   renderListEditor(title, listName) {
     return (
-      <div className="edit-section">
+      <div className="edit-section list-editor">
         {title}
         {this.renderListElements(listName)}
         <div>
@@ -102,6 +108,7 @@ export default class Authoring extends PureComponent {
         <tr key={index}>
           <td><input type="text" value={col.heading} data-index={index} data-list-name="columns" data-prop-name="heading" onChange={this.handleListElemChange}/></td>
           <td><input type="checkbox" checked={col.readOnly} data-index={index} data-list-name="columns" data-prop-name="readOnly" onChange={this.handleListElemChange}/></td>
+          <td><input type="checkbox" checked={col.average} data-index={index} data-list-name="columns" data-prop-name="average" onChange={this.handleListElemChange}/></td>
           <td><input type="checkbox" checked={col.chart} data-index={index} data-list-name="columns" data-prop-name="chart" onChange={this.handleListElemChange}/></td>
           <td><input type="text" style={{width: "50px"}} value={col.chartColor} data-index={index} data-list-name="columns" data-prop-name="chartColor" onChange={this.handleListElemChange}/></td>
           <td><i className="rm-icon fa fa-times-circle" data-index={index} data-list-name="columns" onClick={this.handleListElemRemove}/></td>
@@ -117,7 +124,7 @@ export default class Authoring extends PureComponent {
         <div className="table-columns">
           <table className="center">
             <tbody>
-              <tr><th>Headings</th><th>Read only</th><th>Chart</th><th>Color</th></tr>
+              <tr><th>Headings</th><th>Read only</th><th>Avg</th><th>Bar Graph</th><th>Color</th></tr>
               {this.renderColumns()}
             </tbody>
           </table>
@@ -131,7 +138,7 @@ export default class Authoring extends PureComponent {
   }
 
   render() {
-    const { chartWidth, chartHeight, rowLines } = this.state;
+    const { chartWidth, chartHeight, rowLines, chartAvgs } = this.state;
     const { initialInteractiveState } = this.props;
     const previewScale = Math.min(1, window.innerWidth / LARA_FULL_WIDTH * 0.97);
     return (
@@ -148,6 +155,7 @@ export default class Authoring extends PureComponent {
               <tr><td>Row Height</td><td><input type="range" min="1" max="5" name="rowLines" value={rowLines} onChange={this.handleInputChange}/></td><td>{rowLines} line{rowLines > 1 ? "s" : ""}</td></tr>
             </tbody>
             </table>
+            <div><input type="checkbox" name="chartAvgs" checked={chartAvgs} disabled={!this.avgsEnabled} onChange={this.handleInputChange}/> Chart Averages</div>
           </div>
         </div>
         <h3>Preview (scaled down to {(previewScale * 100).toFixed(0)}%)</h3>

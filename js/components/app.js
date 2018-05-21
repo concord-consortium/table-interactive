@@ -13,24 +13,28 @@ const DEFAULT_AUTHORED_STATE = {
     {
       heading: 'Trial',
       readOnly: true,
+      average: false,
       chart: false,
       chartColor: ''
     },
     {
       heading: 'Description',
       readOnly: false,
+      average: false,
       chart: false,
       chartColor: ''
     },
     {
       heading: 'Value 1 (unit)',
       readOnly: false,
+      average: false,
       chart: true,
       chartColor: ''
     },
     {
       heading: 'Value 2 (unit)',
       readOnly: false,
+      average: false,
       chart: true,
       chartColor: 'green'
     }
@@ -38,7 +42,8 @@ const DEFAULT_AUTHORED_STATE = {
   labels: ['a', 'b', 'c'],
   chartWidth: 295,
   chartHeight: 240,
-  rowLines: 1
+  rowLines: 1,
+  chartAvgs: false
 };
 
 const DEFAULT_INTERACTIVE_STATE = {
