@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import ReactHandsontable from './react-handsontable';
 
 const ROW_LINE_HEIGHT = 22;
-const AVG_LABEL = "Average";
+const AVG_LABEL = 'Average';
 
 export default class Table extends PureComponent {
   constructor(props) {
@@ -24,32 +24,20 @@ export default class Table extends PureComponent {
 
   get handsontableOptions() {
     const { columns, headingWidths, rowLines, averages, onDataChange } = this.props;
-    let tableData = this.data;
-    let showAvgs = columns.find((column)=>{return column.average === true}) !== undefined;
-    if(showAvgs) {
-      let avgRow = averages.concat();
-      // hide averages for columns not set to display it
-      columns.forEach((column, colIdx) => {
-        if(!column.average) {
-          avgRow[colIdx] = "";
-        }
-      });
+    const tableData = this.data;
+    const showAvgs = columns.find(column => column.average) !== undefined
+    if (showAvgs) {
+      const avgRow = averages.concat();
       avgRow[0] = AVG_LABEL;
-      if(tableData[tableData.length-1][0] !== AVG_LABEL) {
-        tableData.push(avgRow);
-      }
-      else {
-        tableData[tableData.length-1] = avgRow;
-      }
+      tableData.push(avgRow);
     }
-    const opts = {
+    return {
       data: tableData,
       cells: (row, col) => {
         // Make the average row read-only
-        let cellProps = {};
-        let column = columns[col];
-        cellProps.readOnly = column.readOnly || showAvgs && row === this.data.length;
-        return cellProps;
+        return {
+          readOnly: columns[col].readOnly || showAvgs && row === tableData.length - 1
+        }
       },
       columns: columns,
       colWidths: headingWidths,
@@ -66,7 +54,6 @@ export default class Table extends PureComponent {
         }
       }
     };
-    return opts;
   }
 
   getUserData(row, col) {
@@ -78,7 +65,7 @@ export default class Table extends PureComponent {
 
   removeAvgRow(data) {
     let lastIdx = data.length - 1;
-    if(data[lastIdx] && data[lastIdx][0] === AVG_LABEL) {
+    if (data[lastIdx] && data[lastIdx][0] === AVG_LABEL) {
       data.splice(lastIdx, 1);
     }
     return data;
@@ -90,8 +77,7 @@ export default class Table extends PureComponent {
     labels.forEach((label, rowIdx) => {
       const row = [label];
       for (let i = 1; i < columns.length; i++) {
-      let userData = this.getUserData(rowIdx, i);
-        row.push(userData);
+        row.push(this.getUserData(rowIdx, i));
       }
       data.push(row);
     });

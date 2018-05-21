@@ -24,7 +24,7 @@ export default class Authoring extends PureComponent {
 
   get avgsEnabled() {
     const { columns } = this.state;
-    return columns.filter((column) => {return column.average}).length > 0;
+    return columns.filter(column => column.average).length > 0;
   }
 
   componentDidUpdate() {
@@ -145,7 +145,7 @@ export default class Authoring extends PureComponent {
       <div className="authoring">
         <div className="authoring-section">
           {this.renderColumnsEditor()}
-          {this.renderListEditor('Columns', 'labels')}
+          {this.renderListEditor('Rows', 'labels')}
           <div className="edit-section">
             <p>Graph dimensions</p>
             <table>
@@ -155,7 +155,7 @@ export default class Authoring extends PureComponent {
               <tr><td>Row Height</td><td><input type="range" min="1" max="5" name="rowLines" value={rowLines} onChange={this.handleInputChange}/></td><td>{rowLines} line{rowLines > 1 ? "s" : ""}</td></tr>
             </tbody>
             </table>
-            <div><input type="checkbox" name="chartAvgs" checked={chartAvgs} disabled={!this.avgsEnabled} onChange={this.handleInputChange}/>Chart Averages</div>
+            <div><input type="checkbox" name="chartAvgs" checked={chartAvgs} disabled={!this.avgsEnabled} onChange={this.handleInputChange}/> Chart Averages</div>
           </div>
         </div>
         <h3>Preview (scaled down to {(previewScale * 100).toFixed(0)}%)</h3>
