@@ -1,5 +1,9 @@
 # Table Interactive
 
+Authoring view of the interactive:
+https://models-resources.concord.org/table-interactive/index.html?mode=authoring
+
+Actual interactive itself, requires embedding in LARA to be useful:
 https://models-resources.concord.org/table-interactive/index.html
 
 ## Development
