@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "start:secure": "webpack-dev-server --https --inline --hot --content-base dist/ --cert ~/.localhost-ssl/localhost.pem --key ~/.localhost-ssl/localhost.key"
   },
   "author": "Piotr Janik <janikpiotrek@gmail.com>",
   "license": "MIT",

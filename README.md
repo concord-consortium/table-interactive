@@ -8,32 +8,32 @@ https://models-resources.concord.org/table-interactive/index.html
 
 ## Development
 
-First, you need to make sure that webpack is installed and all the NPM packages required by this project are available:
+First, you need to make sure all the NPM packages required by this project are available:
 
 ```
-npm install -g webpack
 npm install
 ```
-Then you can build the project files using:
+
+Then start webpack dev server:
 ```
-webpack
-```
-or start webpack dev server:
-```
-npm install -g webpack-dev-server 
-webpack-dev-server
+npm run start
 ```
 and open [http://localhost:8080/](http://localhost:8080/).
 
-## Deployment (gh-pages)
-
-Build project using webpack and push content of the `dist` folder to the `gh-pages` branch.
-It can be done automatically by `deploy.sh` script, just run:
-
+Or to test it inside of LARA you'll need to run it with https:
 ```
-./deploy.sh
+npm run start:secure
 ```
+And use the URL https://localhost:8080
 
-## License 
+## Deployment
+
+Pushes to master will build automatically on travis, and deploy to
+https://models-resources.concord.org/table-interactive/
+
+Pushes to other branches will deploy to
+https://models-resources.concord.org/table-interactive/branch/<branch-name>/
+
+## License
 
 [MIT](https://github.com/concord-consortium/seismic-explorer/blob/master/LICENSE)

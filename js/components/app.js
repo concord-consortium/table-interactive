@@ -46,6 +46,10 @@ const DEFAULT_AUTHORED_STATE = {
   chartAvgs: false
 };
 
+function validAuthoredState(state) {
+  return state && state.columns
+}
+
 const DEFAULT_INTERACTIVE_STATE = {
   data: null
 };
@@ -83,7 +87,7 @@ export default class App extends PureComponent {
     const interactiveState = typeof data.interactiveState === 'string' ? JSON.parse(data.interactiveState) : data.interactiveState;
     this.setState({
       mode: data.mode,
-      authoredState: authoredState || DEFAULT_AUTHORED_STATE,
+      authoredState: validAuthoredState(authoredState) || DEFAULT_AUTHORED_STATE,
       interactiveState: interactiveState || DEFAULT_INTERACTIVE_STATE
     });
     this.phone.post('supportedFeatures', {
