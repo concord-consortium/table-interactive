@@ -46,8 +46,9 @@ const DEFAULT_AUTHORED_STATE = {
   chartAvgs: false
 };
 
+// If the state is valid return it, otherwise return undefined
 function validAuthoredState(state) {
-  return state && state.columns
+  return state && state.columns ? state : undefined;
 }
 
 function objectOrJSONParse(value) {
