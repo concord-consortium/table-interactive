@@ -50,6 +50,20 @@ function validAuthoredState(state) {
   return state && state.columns
 }
 
+function objectOrJSONParse(value) {
+  if (typeof value === 'string') {
+    // In some cases an empty string is passed intead of valid JSON
+    // or an object
+    if (value === "") {
+      return null;
+    } else {
+      return JSON.parse(value);
+    }
+  } else {
+    return value
+  }
+}
+
 const DEFAULT_INTERACTIVE_STATE = {
   data: null
 };
@@ -83,8 +97,8 @@ export default class App extends PureComponent {
   }
 
   initInteractive(data) {
-    const authoredState = typeof data.authoredState === 'string' ? JSON.parse(data.authoredState) : data.authoredState;
-    const interactiveState = typeof data.interactiveState === 'string' ? JSON.parse(data.interactiveState) : data.interactiveState;
+    const authoredState = objectOrJSONParse(data.authoredState);
+    const interactiveState = objectOrJSONParse(data.interactiveState);
     this.setState({
       mode: data.mode,
       authoredState: validAuthoredState(authoredState) || DEFAULT_AUTHORED_STATE,
